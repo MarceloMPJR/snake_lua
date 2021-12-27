@@ -4,8 +4,8 @@ local FPS = 9
 local nextTime = love.timer.getTime() + 1/FPS
 
 function love.load()
-  Object = require "classic"
-  Enum = require "enum"
+  Object = require "libs.classic"
+  Enum = require "libs.enum"
 
   require "game.ui"
   require "game.phase"

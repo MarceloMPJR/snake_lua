@@ -1,6 +1,3 @@
-Object = require "classic"
-Enum = require "enum"
-
 Phase = Object:extend()
 
 PHASE_BLOCK_SIZE = 20
