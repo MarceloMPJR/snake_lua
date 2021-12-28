@@ -7,12 +7,28 @@ local SIZE_Y = 30
 
 PHASE_OBJECTS = Enum.new("Objects", { "empty", "wall", "snake", "point" })
 
+local function randomPoint()
+  math.randomseed(os.time())
+  local x = math.random(2, SIZE_X - 3)
+
+  math.randomseed(os.time())
+  local y = math.random(2, SIZE_Y - 3)
+
+  return {x, y}
+end
+
 function Phase:new()
   require "game.snake"
 
   self.snake = Snake()
+  self.totalPoints = 0
 
+  self:newPoint()
   self:update()
+end
+
+function Phase:newPoint()
+  self.point = randomPoint()
 end
 
 function Phase:update()
@@ -38,17 +54,18 @@ function Phase:update()
     snake_body = snake_body.body
   end
 
-  self.tilemap[20][20] = PHASE_OBJECTS.point
+  self.tilemap[self.point[2]][self.point[1]] = PHASE_OBJECTS.point
 end
 
 function Phase:grow()
   if self:shold_grow() then
     self.snake:grow()
+    self:newPoint()
+    self.totalPoints = self.totalPoints + 1
   end
 end
 
 function Phase:shold_grow()
-  print(self.tilemap[self.snake.head.y][self.snake.head.x] == PHASE_OBJECTS.point)
   return self.tilemap[self.snake.head.y][self.snake.head.x] == PHASE_OBJECTS.point
 end
 
@@ -63,6 +80,7 @@ function Phase:draw()
       draw_tile(self.tilemap[i][j], j * PHASE_BLOCK_SIZE, i * PHASE_BLOCK_SIZE)
     end
   end
+  draw_total_points(self.totalPoints)
 end
 
 function Phase:debug()

@@ -1,7 +1,10 @@
 local rect
 
 local FPS = 9
-local nextTime = love.timer.getTime() + 1/FPS
+
+local function nextTime()
+  return love.timer.getTime() + 1/(FPS + phase.totalPoints)
+end
 
 function love.load()
   Object = require "libs.classic"
@@ -22,9 +25,11 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 function love.update(dt)
-  local timedif = nextTime - love.timer.getTime()
+  local myNextTime = nextTime()
+  local timedif = myNextTime - love.timer.getTime()
+
   if timedif > 0 then love.timer.sleep(timedif) end
-  nextTime = nextTime + 1/FPS
+  myNextTime = myNextTime + 1/FPS
 
   phase.snake:move()
   phase:grow()
